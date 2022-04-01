@@ -81,7 +81,7 @@ public class PlayerMove : MonoBehaviour
         {
             SX = transform.position.x;
             SY = transform.position.y;
-            Destroy(GameObject.FindWithTag("Checkpoint"));
+            Destroy(collision.gameObject);
         }
     }
     }
