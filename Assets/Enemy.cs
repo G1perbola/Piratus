@@ -5,30 +5,48 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int health;
+    public Transform pos1, pos2;
     public float speed;
-    public float seeDistance = 2f;
     public Transform target;
+    public static float Distance;
+    public Transform startPos;
+    Vector3 nextPos;
+    public bool faceRight = true;
+    public Vector2 moveVector;
 
     void Start()
     {
-        target = GameObject.FindWithTag("Player").transform;
+        nextPos = startPos.position;
+        target = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
-    private void Update()
+    void Update()
     {
+
         if (health <= 0)
+                {
+                    Destroy(gameObject);
+                }
+        /* transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);*/
+
+        if (Vector2.Distance(transform.position, target.position) < 7)
         {
-            Destroy(gameObject);
-        }
-        if (Vector3.Distance(transform.position, target.transform.position) < seeDistance)
-        {
-            transform.right = target.transform.position - transform.position;
-            transform.Translate(new Vector2(0, speed * Time.deltaTime));
+            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
         }
         else
         {
-            //idle
-        }
+            transform.position = Vector3.MoveTowards(transform.position, nextPos, speed * Time.deltaTime);
+            if (transform.position == pos1.position)
+            {
+                nextPos = pos2.position;
+                transform.localScale = new Vector2(-4, 4);
+            }
+            if (transform.position == pos2.position)
+            {
+                nextPos = pos1.position;
+                transform.localScale = new Vector2(4, 4);
+            }
+       }
     }
 
     public void TakeDamage(int damage) 
